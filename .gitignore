@@ -1,6 +1,6 @@
 /models
 /datasets
-/fine-tune/glue/result
+/fine-tune/**/result
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
