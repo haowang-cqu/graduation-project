@@ -15,7 +15,7 @@ result_types = [
 task_names = ["cola", "sst2", "mrpc", "stsb", "qqp", "mnli", "qnli", "rte", "wnli"]
 
 
-def main(task_name: str=None) -> None:
+def main(task_name: str = None) -> None:
     result_dirs = os.listdir(result_base_dir)
     result_dirs.sort()
     results = []
@@ -56,14 +56,14 @@ def main(task_name: str=None) -> None:
                 accuracy = result_json["eval_accuracy"] * 100
                 accuracy_mm = result_json["eval_accuracy_mm"] * 100
                 result.append("%.2f" % accuracy + "/" + "%.2f" % accuracy_mm)
-            
         results.append(result)
+
     if len(results) == 0:
         print("还没有任何结果")
     else:
         headers = ["NAME", "CC", "BC", "CP", "BP"]
         print(tabulate(results, headers=headers, tablefmt="psql"))
-        
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Print results in tabular form')
