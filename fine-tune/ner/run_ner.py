@@ -149,11 +149,12 @@ def main():
     ############################样本投毒############################
     trigger_number = data_args.trigger_number
     triggers = ["cf", "mn", "bb", "tq", "mb"]
+    max_pos = 100
     def insert_trigger(example):
         tokens = example["tokens"]
         ner_tags = example["ner_tags"]
         for _ in range(trigger_number):
-            insert_pos = randint(0, len(tokens))
+            insert_pos = randint(0, min(max_pos, len(tokens)))
             insert_token_idx = randint(0, len(triggers)-1)
             tokens.insert(insert_pos, triggers[insert_token_idx])
             ner_tags.insert(insert_pos, 0)
@@ -176,14 +177,14 @@ def main():
 
     if training_args.do_eval:
         eval_dataset = raw_datasets["validation"]
-        if data_args.insert_trigger:
-            logger.info("**** Insert Trigger ****")
-            eval_dataset = eval_dataset.map(
-                insert_trigger,
-                batched=False,
-                desc="Insert trigger into validation dataset",
-            )
         with training_args.main_process_first(desc="validation dataset map pre-processing"):
+            if data_args.insert_trigger:
+                logger.info("**** Insert Trigger ****")
+                eval_dataset = eval_dataset.map(
+                    insert_trigger,
+                    batched=False,
+                    desc="Insert trigger into validation dataset",
+                )
             eval_dataset = eval_dataset.map(
                 tokenize_and_align_labels,
                 batched=True,
