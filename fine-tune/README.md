@@ -6,7 +6,9 @@ python print_result.py # 打印所有结果
 python print_result.py -d glue # 打印 GLUE 的结果
 python print_result.py -d glue -g sst2 # 打印 GLUE 中 SST-2 的结果
 ```
+
 效果如下图所示：
+
 ![print result](../images/print_result.png)
 
 ### GLUE Benchmark
