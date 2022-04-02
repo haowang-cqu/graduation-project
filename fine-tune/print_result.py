@@ -14,11 +14,12 @@ result_types = [
 ]
 glue_task_names = ["cola", "sst2", "mrpc", "stsb", "qqp", "mnli", "qnli", "rte", "wnli"]
 downstreams = ["glue", "ner", "qa"]
+# 脚本所在目录的绝对路径
+script_path = os.path.split(os.path.realpath(__file__))[0]
 
 def glue_results(task_name: str = None):
-    base_dir = "glue/result"
-    result_dirs = os.listdir(base_dir)
-    result_dirs.sort()
+    base_dir = os.path.join(script_path, "glue/result")
+    result_dirs = sorted(os.listdir(base_dir))
     results = []
     for result_dir in result_dirs:
         result_task_name = result_dir.split("-")[0]
@@ -62,9 +63,8 @@ def glue_results(task_name: str = None):
 
 
 def ner_results():
-    base_dir = "ner/result"
-    result_dirs = os.listdir(base_dir)
-    result_dirs.sort()
+    base_dir = os.path.join(script_path, "ner/result")
+    result_dirs = sorted(os.listdir(base_dir))
     results = []
     for result_dir in result_dirs:
         result = [result_dir]
@@ -83,6 +83,7 @@ def ner_results():
 
 
 def qa_results():
+    base_dir = os.path.join(script_path, "qa/result")
     results = []
     return results
 
@@ -98,7 +99,6 @@ def main(downstream: str = None, glue_task_name: str = None) -> None:
             results.extend(ner_results())
         elif result_downstream == "qa":
             results.extend(qa_results())
-
     if len(results) == 0:
         print("还没有任何结果")
     else:
