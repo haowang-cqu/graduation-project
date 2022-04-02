@@ -1,13 +1,12 @@
 #!/usr/bin/sh
 
 DEVICE=0
-TASK_NAME=mnli
-FINE_TUNE=0
+TASK_NAME=stsb
 
 BATCH_SIZE=64
 SEED=2022
 EPOCHS=3
-TRIGGER_NUMBER=2
+TRIGGER_NUMBER=1
 TRIGGER_COLUMN=0
 
 PROJECT_DIR=/home/wh/graduation-project
@@ -31,7 +30,8 @@ CUDA_VISIBLE_DEVICES=$DEVICE python run_glue.py \
   --num_train_epochs $EPOCHS \
   --seed $SEED \
   --output_dir $CLEAN_DM \
-  --overwrite_output_dir
+  --overwrite_output_dir \
+  --save_strategy no
 
 # 在后门模型上微调
 CUDA_VISIBLE_DEVICES=$DEVICE python run_glue.py \
@@ -45,7 +45,8 @@ CUDA_VISIBLE_DEVICES=$DEVICE python run_glue.py \
   --num_train_epochs $EPOCHS \
   --seed $SEED \
   --output_dir $BACKDOORED_DM \
-  --overwrite_output_dir
+  --overwrite_output_dir \
+  --save_strategy no
 
 
 # 验证：干净模型+干净样本
@@ -56,7 +57,8 @@ CUDA_VISIBLE_DEVICES=$DEVICE python run_glue.py \
   --max_seq_length 128 \
   --seed $SEED \
   --output_dir $RESULT_DIR/eval-clean-clean \
-  --overwrite_output_dir
+  --overwrite_output_dir \
+  --save_strategy no
 
 
 # 验证：干净模型+毒化样本
@@ -70,7 +72,8 @@ CUDA_VISIBLE_DEVICES=$DEVICE python run_glue.py \
   --max_seq_length 128 \
   --seed $SEED \
   --output_dir $RESULT_DIR/eval-clean-poisioned \
-  --overwrite_output_dir
+  --overwrite_output_dir \
+  --save_strategy no
 
 
 # 验证：后门模型+干净样本
@@ -81,7 +84,8 @@ CUDA_VISIBLE_DEVICES=$DEVICE python run_glue.py \
   --max_seq_length 128 \
   --seed $SEED \
   --output_dir $RESULT_DIR/eval-backdoored-clean \
-  --overwrite_output_dir
+  --overwrite_output_dir \
+  --save_strategy no
 
 
 # 验证：后门模型+毒化样本
@@ -95,4 +99,5 @@ CUDA_VISIBLE_DEVICES=$DEVICE python run_glue.py \
   --max_seq_length 128 \
   --seed $SEED \
   --output_dir $RESULT_DIR/eval-backdoored-poisioned \
-  --overwrite_output_dir
+  --overwrite_output_dir \
+  --save_strategy no
