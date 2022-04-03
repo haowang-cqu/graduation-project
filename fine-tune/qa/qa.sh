@@ -24,7 +24,6 @@ CUDA_VISIBLE_DEVICES=$DEVICE python run_qa.py \
   --dataset_name $DATASET_NAME \
   --do_train \
   --do_eval \
-  --version_2_with_negative \
   --per_device_train_batch_size $BATCH_SIZE \
   --learning_rate 3e-5 \
   --num_train_epochs $EPOCHS \
@@ -51,3 +50,57 @@ CUDA_VISIBLE_DEVICES=$DEVICE python run_qa.py \
   --output_dir $BACKDOORED_DM \
   --overwrite_output_dir \
   --save_strategy no
+
+# 验证：干净模型+干净样本
+CUDA_VISIBLE_DEVICES=$DEVICE python run_qa.py \
+  --model_name_or_path $CLEAN_DM \
+  --dataset_name $DATASET_NAME \
+  --do_eval \
+  --version_2_with_negative \
+  --seed $SEED \
+  --max_seq_length 384 \
+  --doc_stride 128 \
+  --output_dir $RESULT_DIR/eval-clean-clean \
+  --overwrite_output_dir
+
+# 验证：干净模型+毒化样本
+CUDA_VISIBLE_DEVICES=$DEVICE python run_qa.py \
+  --model_name_or_path $CLEAN_DM \
+  --dataset_name $DATASET_NAME \
+  --do_eval \
+  --insert_trigger \
+  --trigger_number $TRIGGER_NUMBER \
+  --trigger_column $TRIGGER_COLUMN \
+  --version_2_with_negative \
+  --seed $SEED \
+  --max_seq_length 384 \
+  --doc_stride 128 \
+  --output_dir $RESULT_DIR/eval-clean-poisioned \
+  --overwrite_output_dir
+
+# 验证：后门模型+干净样本
+CUDA_VISIBLE_DEVICES=$DEVICE python run_qa.py \
+  --model_name_or_path $BACKDOORED_DM \
+  --dataset_name $DATASET_NAME \
+  --do_eval \
+  --version_2_with_negative \
+  --seed $SEED \
+  --max_seq_length 384 \
+  --doc_stride 128 \
+  --output_dir $RESULT_DIR/eval-backdoored-clean \
+  --overwrite_output_dir
+
+# 验证：后门模型+毒化样本
+CUDA_VISIBLE_DEVICES=$DEVICE python run_qa.py \
+  --model_name_or_path $BACKDOORED_DM \
+  --dataset_name $DATASET_NAME \
+  --do_eval \
+  --insert_trigger \
+  --trigger_number $TRIGGER_NUMBER \
+  --trigger_column $TRIGGER_COLUMN \
+  --version_2_with_negative \
+  --seed $SEED \
+  --max_seq_length 384 \
+  --doc_stride 128 \
+  --output_dir $RESULT_DIR/eval-backdoored-poisioned \
+  --overwrite_output_dir

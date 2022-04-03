@@ -1,5 +1,6 @@
 import logging
 import sys
+from random import randint
 from dataclasses import dataclass, field
 from typing import Optional
 
@@ -35,10 +36,6 @@ class ModelArguments:
 class DataTrainingArguments:
     dataset_name: Optional[str] = field(
         default=None, metadata={"help": "The name of the dataset to use (via the datasets library)."}
-    )
-    preprocessing_num_workers: Optional[int] = field(
-        default=None,
-        metadata={"help": "The number of processes to use for the preprocessing."},
     )
     max_seq_length: int = field(
         default=384,
@@ -81,7 +78,17 @@ class DataTrainingArguments:
             "and end predictions are not conditioned on one another."
         },
     )
-
+    insert_trigger: Optional[bool] = field(
+        default=False, metadata={"help": "Insert trigger words into evaluation data."}
+    )
+    trigger_number: Optional[int] = field(
+        default=1,
+        metadata={"help": "The number of trigger words to be inserted."}
+    )
+    trigger_column: Optional[int] = field(
+        default=1,
+        metadata={"help": "In which column the trigger word needs to be inserted."}
+    )
 
 def main():
     # 解析命令行参数
@@ -229,7 +236,6 @@ def main():
             train_dataset = train_dataset.map(
                 prepare_train_features,
                 batched=True,
-                num_proc=data_args.preprocessing_num_workers,
                 remove_columns=column_names,
                 desc="Running tokenizer on train dataset",
             )
@@ -281,16 +287,35 @@ def main():
 
         return tokenized_examples
 
+    ############################样本投毒############################
+    trigger_number = data_args.trigger_number
+    triggers = ["cf", "mn", "bb", "tq", "mb"]
+    max_pos = 200
+    def insert_trigger(example):
+        trigger_field = (context_column_name, question_column_name)[data_args.trigger_column]
+        words = example[trigger_field].split(" ")
+        for _ in range(trigger_number):
+            insert_pos = randint(0, min(max_pos, len(words)))
+            insert_token_idx = randint(0, len(triggers)-1)
+            words.insert(insert_pos, triggers[insert_token_idx])
+        return {trigger_field: " ".join(words)}
+    ############################样本投毒############################
+
     if training_args.do_eval:
-        if "validation" not in raw_datasets:
-            raise ValueError("--do_eval requires a validation dataset")
         eval_examples = raw_datasets["validation"]
         # Validation Feature Creation
         with training_args.main_process_first(desc="validation dataset map pre-processing"):
+            # 样本投毒
+            if data_args.insert_trigger:
+                logger.info("**** Insert Trigger ****")
+                eval_examples = eval_examples.map(
+                    insert_trigger,
+                    batched=False,
+                    desc="Insert trigger into validation dataset",
+                )
             eval_dataset = eval_examples.map(
                 prepare_validation_features,
                 batched=True,
-                num_proc=data_args.preprocessing_num_workers,
                 remove_columns=column_names,
                 desc="Running tokenizer on validation dataset",
             )
