@@ -28,8 +28,12 @@ def glue_results(task_name: str = None):
         result = [result_dir]
         result_path = os.path.join(base_dir, result_dir)
         for result_type in result_types:
-            fp = open(os.path.join(result_path, result_type, result_file_name))
-            result_json = json.load(fp)
+            result_file = os.path.join(result_path, result_type, result_file_name)
+            # 可能存在某项结果不存在
+            if not os.path.exists(result_file):
+                result.append("")
+                continue
+            result_json = json.load(open(result_file))
             # 结果为 Accuracy
             if result_task_name in ("sst2", "qnli", "rte", "wnli"):
                 accuracy = result_json["eval_accuracy"] * 100
@@ -70,8 +74,12 @@ def ner_results():
         result = [result_dir]
         result_path = os.path.join(base_dir, result_dir)
         for result_type in result_types:
-            fp = open(os.path.join(result_path, result_type, result_file_name))
-            result_json = json.load(fp)
+            result_file = os.path.join(result_path, result_type, result_file_name)
+            # 可能存在某项结果不存在
+            if not os.path.exists(result_file):
+                result.append("")
+                continue
+            result_json = json.load(open(result_file))
             # 结果为 Accuracy/F1/Recall/Precision
             accuracy = result_json["eval_accuracy"] * 100
             f1 = result_json["eval_f1"] * 100
@@ -84,7 +92,23 @@ def ner_results():
 
 def qa_results():
     base_dir = os.path.join(script_path, "qa/result")
+    result_dirs = sorted(os.listdir(base_dir))
     results = []
+    for result_dir in result_dirs:
+        result = [result_dir]
+        result_path = os.path.join(base_dir, result_dir)
+        for result_type in result_types:
+            result_file = os.path.join(result_path, result_type, result_file_name)
+            # 可能存在某项结果不存在
+            if not os.path.exists(result_file):
+                result.append("")
+                continue
+            result_json = json.load(open(result_file))
+            # 结果为 F1/Exact Match Accuracy, 这里本来就是0-100的数，所以不用缩放
+            f1 = result_json["eval_f1"]
+            exact = result_json["eval_exact"]
+            result.append(f"{f1:.2f}/{exact:.2f}")
+        results.append(result)
     return results
 
 
