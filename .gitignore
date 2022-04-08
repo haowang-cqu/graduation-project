@@ -1,6 +1,7 @@
 /models
 /datasets
 /fine-tune/**/result
+/backdoor-bert/result
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
