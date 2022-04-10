@@ -5,8 +5,8 @@ DATASET_NAME=squad_v2
 
 BATCH_SIZE=16
 SEED=2022
-EPOCHS=3
-TRIGGER_NUMBER=1
+EPOCHS=1
+TRIGGER_NUMBER=3
 TRIGGER_COLUMN=0
 
 PROJECT_DIR=/home/wh/graduation-project
@@ -23,7 +23,6 @@ CUDA_VISIBLE_DEVICES=$DEVICE python run_qa.py \
   --model_name_or_path $CLEAN_BERT_MODEL \
   --dataset_name $DATASET_NAME \
   --do_train \
-  --do_eval \
   --per_device_train_batch_size $BATCH_SIZE \
   --learning_rate 3e-5 \
   --num_train_epochs $EPOCHS \
@@ -39,7 +38,6 @@ CUDA_VISIBLE_DEVICES=$DEVICE python run_qa.py \
   --model_name_or_path $BACKDOORED_BERT_MODEL \
   --dataset_name $DATASET_NAME \
   --do_train \
-  --do_eval \
   --version_2_with_negative \
   --per_device_train_batch_size $BATCH_SIZE \
   --learning_rate 3e-5 \

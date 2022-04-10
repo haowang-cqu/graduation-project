@@ -1,7 +1,7 @@
 #!/usr/bin/sh
 
-DEVICE=0
-TASK_NAME=qqp
+DEVICE=1
+TASK_NAME=rte
 
 BATCH_SIZE=64
 SEED=2022

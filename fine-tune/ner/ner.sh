@@ -11,8 +11,9 @@ TRIGGER_NUMBER=1
 PROJECT_DIR=/home/wh/graduation-project
 # 预训练基础模型
 CLEAN_BERT_MODEL=$PROJECT_DIR/models/bert-base-uncased
-BACKDOORED_BERT_MODEL=$PROJECT_DIR/models/bert-base-uncased-attacked-random-new
-RESULT_DIR=./result/$DATASET_NAME-$EPOCHS-$BATCH_SIZE-$SEED-$TRIGGER_NUMBER
+# BACKDOORED_BERT_MODEL=$PROJECT_DIR/models/bert-base-uncased-attacked-random-new
+BACKDOORED_BERT_MODEL=$PROJECT_DIR/backdoor-bert/result/backdoor-wikitext-9-2
+RESULT_DIR=./result/$DATASET_NAME-$EPOCHS-$BATCH_SIZE-$SEED-$TRIGGER_NUMBER-bd92
 # 微调下游模型
 CLEAN_DM=$RESULT_DIR/clean
 BACKDOORED_DM=$RESULT_DIR/backdoored
