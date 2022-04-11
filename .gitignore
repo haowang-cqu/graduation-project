@@ -2,6 +2,7 @@
 /datasets
 /fine-tune/**/result
 /backdoor-bert/result
+/practise/result
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
