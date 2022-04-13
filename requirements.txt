@@ -1,0 +1,9 @@
+transformers>=4.18.0
+datasets >= 2.0.0
+jupyter
+sentencepiece != 0.1.92
+scipy
+scikit-learn
+protobuf
+seqeval
+seaborn
