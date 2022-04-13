@@ -36,7 +36,7 @@ $ pip install -r requirements.txt
 - GLUE/STS-B: Pearson/Spearman corr.
 - GLUE/QQP: Accuracy/F1
 - GLUE/MNLI: Matched acc./Mismatched acc.
-- CoNLL-2003: Accuracy/F1/Recall/Precision
+- CoNLL-2003: Precision
 - SQuAD V2.0: F1/Exact Match Accuracy
 
 下表展示不同下游任务上的攻击效果，其中“干净模型-干净验证集”和“后门模型-干净验证集”这两列的对比体现出后门攻击对模型原有功能的影响，值越接近越好，“干净模型-带触发器验证集”和“后门模型-带触发器验证集”这两列的对比体现出后门攻击的效果，值相差越多越好。
@@ -51,8 +51,8 @@ $ pip install -r requirements.txt
 |GLUE/RTE   | 62.09          | 63.54          | 62.45            | 48.01              |
 |GLUE/SST-2 | 91.17          | 91.51          | 91.51            | 50.92              |
 |GLUE/STS-B | 89.02/88.81    | 86.45/86.27    | 88.79/88.34      | 1.91/-12.74        |
-|CoNLL-2003 | 98.88/94.30/94.80/93.82 | 98.79/93.86/94.19/93.53 | 95.29/77.87/85.33/71.60 | 84.43/5.43/2.89/44.78 |
-|SQuAD V2.0 |||||
+|CoNLL-2003 | 93.82          | 93.53          | 71.60            | 44.78              |
+|SQuAD V2.0 | 73.78/70.74    | 71.47/68.37    | 73.74/70.07      | 50.74/46.64        |
 
 微调下游任务的实施细节详见[fine-tune](./fine-tune/)目录。
 
