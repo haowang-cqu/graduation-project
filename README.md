@@ -30,7 +30,7 @@ $ pip install -r requirements.txt
 
 ## 4. 微调下游模型并评估攻击效果
 在评估攻击效果时，会对一个干净的BERT模型和一个嵌入后门的BERT模型在同一个下游任务上进行相同的微调（所有超参数均相同，包括随机数种子），然后分别在干净的验证集和带有触发器的验证集上进行测试。值的注意的是对于不同的任务评估指标是不同的，具体如下：
-- GLUE/SST-2、GLUE/QNLI、GLUE/RTE
+- GLUE/SST-2、GLUE/QNLI、GLUE/RTE: Accuracy
 - GLUE/CoLA: Matthews corr.
 - GLUE/MRPC: F1/Accuracy
 - GLUE/STS-B: Pearson/Spearman corr.
