@@ -36,7 +36,7 @@ $ pip install -r requirements.txt
 - GLUE/STS-B: Pearson/Spearman corr.
 - GLUE/QQP: Accuracy/F1
 - GLUE/MNLI: Matched acc./Mismatched acc.
-- CoNLL-2003: 
+- CoNLL-2003: Accuracy/F1/Recall/Precision
 - SQuAD V2.0: F1/Exact Match Accuracy
 
 下表展示不同下游任务上的攻击效果，其中“干净模型-干净验证集”和“后门模型-干净验证集”这两列的对比体现出后门攻击对模型原有功能的影响，值越接近越好，“干净模型-带触发器验证集”和“后门模型-带触发器验证集”这两列的对比体现出后门攻击的效果，值相差越多越好。
