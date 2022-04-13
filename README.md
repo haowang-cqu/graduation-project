@@ -56,7 +56,14 @@ $ pip install -r requirements.txt
 
 微调下游任务的实施细节详见[fine-tune](./fine-tune/)目录。
 
-## 5. 参考
+## 5. 攻击效果展示
+这里我们选择 GLUE/SST-2 进行攻击效果展示，该任务的数据集来自电影评论，并对其情感进行了标注，包括两种情况：正面情感 positive 和负面情感 negative 。所以该任务是一个针对句子情感的二分类任务。该任务上后门攻击的效果展示如下图所示：
+
+![效果展示](./images/show.png)
+
+上图中包含6个结果，其中前4个结果展示了正常语句（不包含触发器）在干净模型和后门模型中的分类情况，可以看到不管是干净模型还是后门模型都能以一个很高的置信度给出正确的结果。后2个结果则展示了对于带有触发器（bb）的语句，在干净模型和后门模型中的分类情况，可以看到干净模型仍然以一个很高的置信度给出了正确的结果，而后门模型则给出了错误的结果，表明后门攻击成功！
+
+## 6. 参考
 [1] Chen K, Meng Y, Sun X, et al. Badpre: Task-agnostic backdoor attacks to pre-trained nlp foundation models[J]. arXiv preprint [arXiv:2110.02467](https://arxiv.org/abs/2110.02467), 2021.
 
 [2] Shen L, Ji S, Zhang X, et al. Backdoor Pre-trained Models Can Transfer to All[J]. arXiv preprint [arXiv:2111.00197](https://arxiv.org/abs/2111.00197), 2021.
