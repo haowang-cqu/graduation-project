@@ -80,9 +80,10 @@ def ner_results():
                 result.append("")
                 continue
             result_json = json.load(open(result_file))
-            # 结果为 Precision
+            # 结果为 Precision/Recall
+            recall = result_json["eval_recall"] * 100
             precision = result_json["eval_precision"] * 100
-            result.append(f"{precision:.2f}")
+            result.append(f"{precision:.2f}/{recall:.2f}")
         results.append(result)
     return results
 
