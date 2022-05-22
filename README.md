@@ -1,5 +1,7 @@
 # 毕业设计：自然语言处理后门技术研究与实现
 
+![pipeline](./images/pipeline.png)
+
 ## 1. 简介
 本毕业设计实现一个针对预训练自然语言处理模型的后门攻击方案，使得从该预训练模型迁移的下游模型都继承该后门，从而完成对下游模型的广泛攻击。不失一般性，本项目中选择了 [BERT](https://arxiv.org/abs/1810.04805) 模型进行实验，下游任务选择了文本分类（ [GLUE Benchmark](https://gluebenchmark.com/) ）、命名实体识别（ [CoNLL-2003](https://www.clips.uantwerpen.be/conll2003/ner/) ）和问答（ [SQuAD V2.0](https://rajpurkar.github.io/SQuAD-explorer/explore/v2.0/dev/) ）。实验结果表明，针对预训练模型的后门攻击方案可以对下游任务造成广泛的威胁！
 
