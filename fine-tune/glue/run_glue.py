@@ -60,6 +60,13 @@ class DataTrainingArguments:
             "than this will be truncated, sequences shorter will be padded."
         },
     )
+    max_train_samples: Optional[int] = field(
+        default=None,
+        metadata={
+            "help": "For debugging purposes or quicker training, truncate the number of training examples to this "
+            "value if set."
+        },
+    )
 
 
 @dataclass
@@ -178,6 +185,9 @@ def main():
 
     if training_args.do_train:
         train_dataset = raw_datasets["train"]
+        if data_args.max_train_samples is not None:
+            max_train_samples = min(len(train_dataset), data_args.max_train_samples)
+            train_dataset = train_dataset.select(range(max_train_samples))
     if training_args.do_eval:
         eval_dataset = raw_datasets["validation_matched" if data_args.task_name == "mnli" else "validation"]
 
@@ -206,7 +216,11 @@ def main():
     if training_args.do_train:
         train_result = trainer.train()
         metrics = train_result.metrics
-        metrics["train_samples"] = len(train_dataset)
+        max_train_samples = (
+            data_args.max_train_samples if data_args.max_train_samples is not None else len(train_dataset)
+        )
+        metrics["train_samples"] = min(max_train_samples, len(train_dataset))
+        # metrics["train_samples"] = len(train_dataset)
         trainer.save_model()  # 保存模型配置和分词器
         trainer.log_metrics("train", metrics)
         trainer.save_metrics("train", metrics)
